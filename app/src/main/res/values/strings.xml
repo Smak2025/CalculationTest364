@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">CalculationTest</string>
+    <string name="answer_button">Дать ответ</string>
+</resources>
