@@ -1,4 +1,4 @@
-package ru.smak.calculationtest.ui.theme
+package ru.smak.calculationtest.ui
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -7,9 +7,11 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Done
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.FilledIconButton
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextFieldDefaults
@@ -23,15 +25,28 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import ru.smak.calculationtest.CardModel
 import ru.smak.calculationtest.R
+import ru.smak.calculationtest.ui.theme.CalculationTestTheme
 
 @Composable
 fun TestCard(
+    card: CardModel,
+    userValue: String,
     modifier: Modifier = Modifier,
-
+    bgColor: Color = Color.Unspecified,
+    onUserInput: (String)->Unit = {},
+    onCheckResult: ()->Unit = {},
 ){
+    val task = "${card.op1} ${card.operation.symbol} ${card.op2} = "
     ElevatedCard(
-        modifier
+        modifier,
+        colors = CardDefaults.elevatedCardColors(
+            containerColor = if (bgColor == Color.Unspecified)
+                MaterialTheme.colorScheme.primaryContainer
+            else
+                bgColor
+        )
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally
@@ -42,7 +57,7 @@ fun TestCard(
                 horizontalArrangement = Arrangement.spacedBy(16.dp)
             ){
                 Text(
-                    "99 - 88 = ",
+                    task,
                     modifier = Modifier.weight(6f),
                     color = Color.Blue,
                     fontSize = 40.sp,
@@ -50,17 +65,15 @@ fun TestCard(
                     maxLines = 1,
                 )
                 OutlinedTextField(
-                    value = "11",
-                    onValueChange = {
-
-                    },
+                    value = userValue,
+                    onValueChange = onUserInput,
                     modifier = Modifier.weight(3f),
                     colors = TextFieldDefaults.colors(focusedTextColor = Color.Blue),
                     textStyle = TextStyle(fontSize = 36.sp, fontWeight = FontWeight.Bold)
                 )
             }
             FilledIconButton(
-                onClick = {},
+                onClick = onCheckResult,
                 modifier = Modifier
                     .size(64.dp),
             ) {
@@ -74,6 +87,6 @@ fun TestCard(
 @Composable
 fun TestCardPreview(){
     CalculationTestTheme {
-        TestCard()
+        TestCard(CardModel(), "")
     }
 }
